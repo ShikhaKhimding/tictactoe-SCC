@@ -56,6 +56,7 @@ export const GameProvider = ({ children }) => {
         handleSquareClick,
         setPlayerX,
         setPlayerO,
+        calculateWinner,
       }}
     >
       {children}
