@@ -1,42 +1,64 @@
 import React, { createContext, useContext, useState } from "react";
 
-// Create the GameContext
-const GameContext = createContext();
+const GameContext = createContext(null);
 
-// GameProvider Component
+export const useGameContext = () => {
+  return useContext(GameContext);
+};
+
 export const GameProvider = ({ children }) => {
-  // State for player names
-  const [playerNames, setPlayerNames] = useState({
-    playerX: "Player X",
-    playerO: "Player O",
-  });
-
-  // State for the current turn
+  const [board, setBoard] = useState(Array(9).fill(null));
+  const [playerX, setPlayerX] = useState("Player 1");
+  const [playerO, setPlayerO] = useState("Player 2");
   const [currentTurn, setCurrentTurn] = useState("X");
 
-  // Function to switch turns
-  const switchTurn = () => {
-    setCurrentTurn((prevTurn) => (prevTurn === "X" ? "O" : "X"));
+  const handleSquareClick = (index) => {
+    if (board[index] || calculateWinner(board)) return;
+
+    const newBoard = board.slice();
+    newBoard[index] = currentTurn;
+
+    setBoard(newBoard);
+    setCurrentTurn(currentTurn === "X" ? "O" : "X");
   };
 
-  // Update player names
-  const updatePlayerNames = (playerXName, playerOName) => {
-    setPlayerNames({ playerX: playerXName, playerO: playerOName });
+  const calculateWinner = (squares) => {
+    const lines = [
+      [0, 1, 2],
+      [3, 4, 5],
+      [6, 7, 8],
+      [0, 3, 6],
+      [1, 4, 7],
+      [2, 5, 8],
+      [0, 4, 8],
+      [2, 4, 6],
+    ];
+    for (let i = 0; i < lines.length; i++) {
+      const [a, b, c] = lines[i];
+      if (
+        squares[a] &&
+        squares[a] === squares[b] &&
+        squares[a] === squares[c]
+      ) {
+        return squares[a];
+      }
+    }
+    return null;
   };
 
   return (
     <GameContext.Provider
       value={{
-        playerNames,
+        board,
+        playerX,
+        playerO,
         currentTurn,
-        switchTurn,
-        updatePlayerNames,
+        handleSquareClick,
+        setPlayerX,
+        setPlayerO,
       }}
     >
       {children}
     </GameContext.Provider>
   );
 };
-
-// Custom hook to use the GameContext
-export const useGameContext = () => useContext(GameContext);

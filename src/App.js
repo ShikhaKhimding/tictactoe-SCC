@@ -1,7 +1,6 @@
 import React from "react";
 import Game from "./Components/Game";
 import "./App.css";
-import Board from "./Components/Board";
 import { GameProvider } from "./Components/GameContext";
 
 const App = () => {

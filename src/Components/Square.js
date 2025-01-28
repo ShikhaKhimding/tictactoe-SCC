@@ -1,4 +1,5 @@
 import React from "react";
+// import { useGameContext } from "../GameContext";
 
 const Square = ({ value, onSquareClick }) => {
   return (
