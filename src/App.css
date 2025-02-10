@@ -1,41 +1,64 @@
-/* App.css */
 
-/* Ensure the squares are properly sized and colored */
+body {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.App.light {
+  background-color: #ffffff; 
+  color: #000000;           
+}
+
+.App.dark {
+  background-color: #272020; 
+  color: #ffffff;           
+}
+
 .square {
-  width: 100px;          /* Adjust the width of each square */
-  height: 100px;         /* Adjust the height of each square */
-  background-color: pink;  /* Set the background color to pink */
-  border: 2px solid #333; /* Border around each square */
-  font-size: 2rem;       /* Text size for 'X' or 'O' */
+  width: 100px;
+  height: 100px;
+  background-color: pink;
+  border: 2px solid #333;
+  font-size: 2rem;
   display: inline-block;
-  text-align: center;    /* Center the 'X' or 'O' */
-  line-height: 100px;    /* Vertically center text within the square */
-  cursor: pointer;      /* Show pointer cursor on hover */
-  transition: background-color 0.3s ease; /* Smooth transition */
+  text-align: center;
+  line-height: 100px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 .square:hover {
-  background-color: #ffccff;  /* Change color when hovered */
+  background-color: #ffccff;
 }
 
-/* Adjust for the board row */
 .board-row {
   display: flex;
-  justify-content: center;  /* Ensure the squares are centered horizontally */
-  margin-bottom: 5px;       /* Add space between rows */
+  justify-content: center;
+  margin-bottom: 5px;
 }
+
 .winner-message {
   font-size: 2rem;
   color: green;
   text-align: center;
-  background-color: pink;  /* Set background color to pink */
+  background-color: pink;
   padding: 20px;
   border: 2px solid green;
   margin-top: 20px;
   width: 300px;
   margin-left: auto;
   margin-right: auto;
-  position: relative;  /* Add this to control its position */
-  top: 20px;           /* Adjust top position to push it down */
-  z-index: 1;          /* Ensure it stays above the board */
+  position: relative;
+  top: 20px;
+  z-index: 1;
+}
+
+/* Button styling */
+button {
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #3182ce;
 }

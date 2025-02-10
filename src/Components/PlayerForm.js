@@ -1,44 +1,36 @@
-import React, { useState } from "react";
+import React from "react";
+import { useForm } from "react-hook-form";
 import { useGameContext } from "./GameContext";
 
-const PlayerForm = () => {
-  const { updatePlayerNames } = useGameContext();
-  const [playerXName, setPlayerXName] = useState("");
-  const [playerOName, setPlayerOName] = useState("");
+export default function PlayerForm() {
+  const { setPlayerX, setPlayerO, setGameStarted } = useGameContext();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    updatePlayerNames(playerXName, playerOName);
+  const onSubmit = (data) => {
+    setPlayerX(data.playerX);
+    setPlayerO(data.playerO);
+    setGameStarted(true);
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col items-center mb-4">
-      <div className="mb-2">
-        <label className="block text-gray-700 mb-1">Player X Name:</label>
-        <input
-          type="text"
-          value={playerXName}
-          onChange={(e) => setPlayerXName(e.target.value)}
-          className="border rounded px-2 py-1"
-        />
+    <form onSubmit={handleSubmit(onSubmit)} className="player-form">
+      <div>
+        <label>Player X Name:</label>
+        <input {...register("playerX", { required: true })} />
+        {errors.playerX && <p className="error">Name is required</p>}
       </div>
-      <div className="mb-2">
-        <label className="block text-gray-700 mb-1">Player O Name:</label>
-        <input
-          type="text"
-          value={playerOName}
-          onChange={(e) => setPlayerOName(e.target.value)}
-          className="border rounded px-2 py-1"
-        />
+
+      <div>
+        <label>Player O Name:</label>
+        <input {...register("playerO", { required: true })} />
+        {errors.playerO && <p className="error">Name is required</p>}
       </div>
-      <button
-        type="submit"
-        className="bg-blue-500 text-white px-4 py-2 rounded"
-      >
-        Start Game
-      </button>
+
+      <button type="submit">Start Game</button>
     </form>
   );
-};
-
-export default PlayerForm;
+}

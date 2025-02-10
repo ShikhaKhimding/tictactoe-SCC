@@ -1,6 +1,15 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import App from "./App"; // Assuming your main component is named App
+import App from "./App";
+import { ThemeProvider } from "./ThemeContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(<App />);
+root.render(
+  <React.StrictMode>
+    <ThemeProvider>
+      {" "}
+      {/* Wrap your app with ThemeProvider */}
+      <App />
+    </ThemeProvider>
+  </React.StrictMode>
+);
