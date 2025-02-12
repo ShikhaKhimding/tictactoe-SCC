@@ -1,4 +1,3 @@
-// src/Components/GameContext.js
 import React, { createContext, useContext, useState } from "react";
 
 const GameContext = createContext();
@@ -6,13 +5,23 @@ export const useGameContext = () => useContext(GameContext);
 
 export const GameProvider = ({ children }) => {
   const [board, setBoard] = useState(Array(9).fill(null));
-  const [history, setHistory] = useState([Array(9).fill(null)]); // Store history
+  const [history, setHistory] = useState([]); // Stores all games
   const [stepNumber, setStepNumber] = useState(0);
   const [playerX, setPlayerX] = useState("");
   const [playerO, setPlayerO] = useState("");
   const [currentTurn, setCurrentTurn] = useState("X");
   const [isAI, setIsAI] = useState(false);
   const [gameStarted, setGameStarted] = useState(false);
+
+  // 🟢 Start the game with player names
+  const startGame = (playerXName, playerOName) => {
+    setPlayerX(playerXName);
+    setPlayerO(playerOName);
+    setBoard(Array(9).fill(null));
+    setStepNumber(0);
+    setCurrentTurn("X");
+    setGameStarted(true);
+  };
 
   const handleSquareClick = (index) => {
     if (board[index] || calculateWinner(board)) return;
@@ -21,7 +30,6 @@ export const GameProvider = ({ children }) => {
     newBoard[index] = currentTurn;
 
     setBoard(newBoard);
-    setHistory([...history.slice(0, stepNumber + 1), newBoard]);
     setStepNumber(stepNumber + 1);
     setCurrentTurn(currentTurn === "X" ? "O" : "X");
 
@@ -40,7 +48,6 @@ export const GameProvider = ({ children }) => {
         emptySquares[Math.floor(Math.random() * emptySquares.length)];
       newBoard[randomMove] = "O";
       setBoard([...newBoard]);
-      setHistory([...history, newBoard]);
       setStepNumber(stepNumber + 1);
       setCurrentTurn("X");
     }
@@ -70,15 +77,35 @@ export const GameProvider = ({ children }) => {
   };
 
   const resetGame = () => {
+    const winner = calculateWinner(board);
+    const gameStatus = winner ? "Completed" : "Incomplete";
+
+    // Store the completed game
+    setHistory((prevHistory) => [
+      ...prevHistory,
+      {
+        gameBoard: board, // Stores the final board state
+        playerX,
+        playerO,
+        winner: winner ? (winner === "X" ? playerX : playerO) : null,
+        gameStatus,
+      },
+    ]);
+
+    // Reset game states
     setBoard(Array(9).fill(null));
-    setHistory([Array(9).fill(null)]);
     setStepNumber(0);
     setCurrentTurn("X");
+    setGameStarted(false);
   };
 
   const jumpTo = (step) => {
-    setStepNumber(step);
-    setBoard(history[step]);
+    const game = history[step];
+    if (!game) return;
+
+    setBoard(game.gameBoard);
+    setPlayerX(game.playerX);
+    setPlayerO(game.playerO);
     setCurrentTurn(step % 2 === 0 ? "X" : "O");
   };
 
@@ -101,6 +128,7 @@ export const GameProvider = ({ children }) => {
         history,
         stepNumber,
         jumpTo,
+        startGame, // 🟢 Provide startGame function
       }}
     >
       {children}

@@ -10,6 +10,7 @@ body {
 
 .App.dark {
   background-color: #272020; 
+  min-height: 100vh;
   color: #ffffff;           
 }
 

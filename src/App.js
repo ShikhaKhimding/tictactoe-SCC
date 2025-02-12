@@ -12,12 +12,6 @@ const App = () => {
       <GameProvider>
         <div className={`App ${theme}`}>
           {/* Single Toggle Button */}
-          <button
-            onClick={toggleTheme}
-            className="p-2 bg-blue-500 text-white rounded-md absolute top-5 right-5"
-          >
-            Switch to {theme === "light" ? "Dark" : "Light"} Mode
-          </button>
 
           <Game />
         </div>
